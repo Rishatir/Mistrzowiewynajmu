@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 
+/// Zasiewanie bazy danymi
+
 namespace MistrzowieWynajmu.Migrations
 {
 	public partial class SeedingDb : Migration

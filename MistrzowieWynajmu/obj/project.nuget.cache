@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zEg3itAVsU/27h9OV745VGWAHhOdSdSKlIJXgD0UE8sOpwbpQuVv35MByVtO/f8L93qPMaeWvi+NK+8MpBjE4w==",
+  "dgSpecHash": "DwYm81xoyiQ4+i0dcT0oqaKDbxN9i/xhT4zhU0Gu+CTgNYWoG50T57kNkVkY/E9DlvDBYQE+FKKSsr3IFPtluQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\dawid\\OneDrive\\Pulpit\\mistrzowiewynajmu_vol7\\MistrzowieWynajmu\\MistrzowieWynajmu.csproj",
+  "projectFilePath": "C:\\Users\\dawid\\OneDrive\\Pulpit\\IV SEMESTR\\Programowanie - Jaszuk\\MistrzowieWynajmu\\Mistrzowiewynajmu\\MistrzowieWynajmu\\MistrzowieWynajmu.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dawid\\.nuget\\packages\\libuv\\1.10.0\\libuv.1.10.0.nupkg.sha512",
     "C:\\Users\\dawid\\.nuget\\packages\\microsoft.applicationinsights\\2.4.0\\microsoft.applicationinsights.2.4.0.nupkg.sha512",

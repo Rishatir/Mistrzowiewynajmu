@@ -27,13 +27,23 @@ namespace MistrzowieWynajmu.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public IActionResult GetProperties()
+		
+		/// <summary>
+		/// Get Properties list
+		/// </summary>
+
+		public IActionResult GetProperties()  
 		{
-			return new JsonResult(_propertyRepository.GetAllProperties());
+			return new JsonResult(_propertyRepository.GetAllProperties()); /// wywolanie metody pobierajacej nieruchomosci
 		}
 
 		[HttpPost("[action]")]
-		public IActionResult AddProperty([FromBody] Property property)
+
+		/// <summary>
+		/// Add property
+		/// </summary>
+		/// <param name="FromBody"> Id: int, Type: PropertyType, Description: string, Rooms: int, Area: int, Washer: bool, Refigerator: bool, Iron: bool, AddressId: int, Address: Address, OwnerId: int, Owner: Owner} </param>
+		public IActionResult AddProperty([FromBody] Property property) 
 		{
 			if (!ModelState.IsValid)
 			{
@@ -57,8 +67,11 @@ namespace MistrzowieWynajmu.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public IActionResult GetProperty(int propertyId)
-		{
+		/// <summary>
+		/// Show properties index
+		/// </summary>
+		/// <param name="propertyid"> is a parameter which show property index. </param>
+		public IActionResult GetProperty(int propertyId) 
 			if(propertyId <= 0)
 			{
 				return BadRequest();
@@ -68,7 +81,13 @@ namespace MistrzowieWynajmu.Controllers
 		}
 
 		[HttpPost("[action]")]
-		public IActionResult UpdateProperty([FromBody] Property property)
+
+		/// <summary>
+		/// Update property details
+		/// </summary>
+		/// <param name="FromBody"> Id: int, Type: PropertyType, Description: string, Rooms: int, Area: int, Washer: bool, Refigerator: bool, Iron: bool, AddressId: int, Address: Address, OwnerId: int, Owner: Owner} </param>
+		public IActionResult UpdateProperty([FromBody] Property property)  
+
 		{
 			if (!ModelState.IsValid)
 			{
@@ -80,7 +99,11 @@ namespace MistrzowieWynajmu.Controllers
 		}
 
 		[HttpGet("[action]")]
-		public IActionResult DeleteProperty(int propertyId)
+
+		///<summary>
+		/// Delete property
+		/// </summary>
+		public IActionResult DeleteProperty(int propertyId)   
 		{
 			if(propertyId <= 0)
 			{
