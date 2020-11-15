@@ -9,7 +9,7 @@ namespace Tests
     public class OwnersControllerTest
     {
         [TestMethod]
-        public void TestDetailsViewData()
+        public void AddOwnerTest()
         {
             var orepoMock = new OwnerRepositoryMock();
             var controller = new OwnersController(orepoMock);

@@ -8,7 +8,7 @@ namespace Tests
     public class PropertyControllerTest
     {
         [TestMethod]
-        public void TestDetailsViewData()
+        public void GetPropertyTest()
         {
             int propertyId = 1;
             PropertyRepositoryMock propertyRepositoryMock = new PropertyRepositoryMock();
