@@ -1,135 +1,131 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MistrzowieWynajmu.Models.Interfaces;
 using MistrzowieWynajmu.Models;
 
 namespace MistrzowieWynajmu.Controllers
 {
-	[Produces("application/json")]
-	[Route("api/Property")]
-	public class PropertyController : Controller
-	{
-		private readonly IPropertyRepository _propertyRepository;
-		private readonly IAddressRepository _addressRepository;
-		private readonly IOwnerRepository _ownerRepository;
+    [Produces("application/json")]
+    [Route("api/Property")]
+    public class PropertyController : Controller
+    {
+        private readonly IPropertyRepository _propertyRepository;
+        private readonly IAddressRepository _addressRepository;
+        private readonly IOwnerRepository _ownerRepository;
 
-		public PropertyController(IPropertyRepository propertyRepository, 
-								  IOwnerRepository ownerRepository, 
-								  IAddressRepository addressRepository)
-		{
-			_propertyRepository = propertyRepository;
-			_addressRepository = addressRepository;
-			_ownerRepository = ownerRepository;
+        public PropertyController(IPropertyRepository propertyRepository,
+                                  IOwnerRepository ownerRepository,
+                                  IAddressRepository addressRepository)
+        {
+            _propertyRepository = propertyRepository;
+            _addressRepository = addressRepository;
+            _ownerRepository = ownerRepository;
+        }
+
+        [HttpGet("[action]")]
+
+        /// <summary>
+        /// Get Properties list
+        /// </summary>
+
+        public IActionResult GetProperties()
+        {
+            return new JsonResult(_propertyRepository.GetAllProperties()); /// wywolanie metody pobierajacej nieruchomosci
 		}
 
-		[HttpGet("[action]")]
-		
-		/// <summary>
-		/// Get Properties list
-		/// </summary>
+        [HttpPost("[action]")]
+        /// <summary>
+        /// Add property
+        /// </summary>
+        /// <param name="FromBody"> Id: int, Type: PropertyType, Description: string, Rooms: int, Area: int, Washer: bool, Refigerator: bool, Iron: bool, AddressId: int, Address: Address, OwnerId: int, Owner: Owner} </param>
+        public IActionResult AddProperty([FromBody] Property property)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-		public IActionResult GetProperties()  
-		{
-			return new JsonResult(_propertyRepository.GetAllProperties()); /// wywolanie metody pobierajacej nieruchomosci
-		}
+            var owner = _ownerRepository.GetOwner(property.OwnerId);
+            if (owner == null)
+            {
+                return NotFound("Cannot find owner with provided ownerId.");
+            }
 
-		[HttpPost("[action]")]
+            var address = _addressRepository.GetAddress(property.AddressId);
+            if (address == null)
+            {
+                return NotFound("Cannot find address with provided addressId.");
+            }
 
-		/// <summary>
-		/// Add property
-		/// </summary>
-		/// <param name="FromBody"> Id: int, Type: PropertyType, Description: string, Rooms: int, Area: int, Washer: bool, Refigerator: bool, Iron: bool, AddressId: int, Address: Address, OwnerId: int, Owner: Owner} </param>
-		public IActionResult AddProperty([FromBody] Property property) 
-		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+            _propertyRepository.AddProperty(property, address, owner);
+            return new JsonResult(property.Id);
+        }
 
-			var owner = _ownerRepository.GetOwner(property.OwnerId);
-			if(owner == null)
-			{
-				return NotFound("Cannot find owner with provided ownerId.");
-			}
+        [HttpGet("[action]")]
+        /// <summary>
+        /// Show properties index
+        /// </summary>
+        /// <param name="propertyid"> is a parameter which show property index. </param>
+        public IActionResult GetProperty(int propertyId)
+        {
+            if (propertyId <= 0)
+            {
+                return BadRequest();
+            }
+            var result = _propertyRepository.GetProperty(propertyId);
 
-			var address = _addressRepository.GetAddress(property.AddressId);
-			if(address == null)
-			{
-				return NotFound("Cannot find address with provided addressId.");
-			}
+            return new JsonResult(result);
+        }
 
-			_propertyRepository.AddProperty(property, address, owner);
-			return new JsonResult(property.Id);
-		}
+        [HttpPost("[action]")]
 
-		[HttpGet("[action]")]
-		/// <summary>
-		/// Show properties index
-		/// </summary>
-		/// <param name="propertyid"> is a parameter which show property index. </param>
-		public IActionResult GetProperty(int propertyId) 
-			if(propertyId <= 0)
-			{
-				return BadRequest();
-			}
+        /// <summary>
+        /// Update property details
+        /// </summary>
+        /// <param name="FromBody"> Id: int, Type: PropertyType, Description: string, Rooms: int, Area: int, Washer: bool, Refigerator: bool, Iron: bool, AddressId: int, Address: Address, OwnerId: int, Owner: Owner} </param>
+        public IActionResult UpdateProperty([FromBody] Property property)
 
-			return new JsonResult(_propertyRepository.GetProperty(propertyId));
-		}
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-		[HttpPost("[action]")]
+            _propertyRepository.UpdateProperty(property);
+            return new JsonResult(property.Id);
+        }
 
-		/// <summary>
-		/// Update property details
-		/// </summary>
-		/// <param name="FromBody"> Id: int, Type: PropertyType, Description: string, Rooms: int, Area: int, Washer: bool, Refigerator: bool, Iron: bool, AddressId: int, Address: Address, OwnerId: int, Owner: Owner} </param>
-		public IActionResult UpdateProperty([FromBody] Property property)  
+        [HttpGet("[action]")]
 
-		{
-			if (!ModelState.IsValid)
-			{
-				return BadRequest(ModelState);
-			}
+        ///<summary>
+        /// Delete property
+        /// </summary>
+        public IActionResult DeleteProperty(int propertyId)
+        {
+            if (propertyId <= 0)
+            {
+                return BadRequest();
+            }
 
-			_propertyRepository.UpdateProperty(property);
-			return new JsonResult(property.Id);
-		}
+            var property = _propertyRepository.GetProperty(propertyId);
+            if (property == null)
+            {
+                return NotFound("Cannot find property with provided propertyId");
+            }
 
-		[HttpGet("[action]")]
+            var owner = _ownerRepository.GetOwner(property.OwnerId);
+            if (owner == null)
+            {
+                return NotFound("Cannot find owner with provided ownerId.");
+            }
 
-		///<summary>
-		/// Delete property
-		/// </summary>
-		public IActionResult DeleteProperty(int propertyId)   
-		{
-			if(propertyId <= 0)
-			{
-				return BadRequest();
-			}
+            var address = _addressRepository.GetAddress(property.AddressId);
+            if (address == null)
+            {
+                return NotFound("Cannot find address with provided addressId.");
+            }
 
-			var property = _propertyRepository.GetProperty(propertyId);
-			if(property == null)
-			{
-				return NotFound("Cannot find property with provided propertyId");
-			}
-
-			var owner = _ownerRepository.GetOwner(property.OwnerId);
-			if (owner == null)
-			{
-				return NotFound("Cannot find owner with provided ownerId.");
-			}
-
-			var address = _addressRepository.GetAddress(property.AddressId);
-			if (address == null)
-			{
-				return NotFound("Cannot find address with provided addressId.");
-			}
-
-			_propertyRepository.DeleteProperty(property, address, owner);
-			return new JsonResult(property.Id);
-		}
-	}
+            _propertyRepository.DeleteProperty(property, address, owner);
+            return new JsonResult(property.Id);
+        }
+    }
 }

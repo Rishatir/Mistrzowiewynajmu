@@ -5,27 +5,39 @@ using System.Threading.Tasks;
 
 namespace MistrzowieWynajmu.Models
 {
-	public class Property
-	{
-		public int Id { get; set; }
-		public PropertyType Type { get; set; }
-		public string Description { get; set; }
-		public int Rooms { get; set; }
-		public int Area { get; set; }
-		public bool Washer { get; set; }
-		public bool Refrigerator { get; set; }
-		public bool Iron { get; set; }
+    public class Property
+    {
+        public int Id { get; set; }
+        public PropertyType Type { get; set; }
+        public string Description { get; set; }
+        public int Rooms { get; set; }
+        public int Area { get; set; }
+        public bool Washer { get; set; }
+        public bool Refrigerator { get; set; }
+        public bool Iron { get; set; }
 
-		public virtual int AddressId { get; set; }
-		public virtual Address Address { get; set; }
+        public virtual int AddressId { get; set; }
+        public virtual Address Address { get; set; }
 
-		public virtual int OwnerId { get; set; }
-		public virtual Owner Owner { get; set; }
-	}
+        public virtual int OwnerId { get; set; }
+        public virtual Owner Owner { get; set; }
+        public Property() { }
+        public Property(int id, PropertyType type, string description, int rooms, int area, bool washer, bool refrigerator, bool iron)
+        {
+            Id = id;
+            Type = type;
+            Description = description;
+            Rooms = rooms;
+            Area = area;
+            Washer = washer;
+            Refrigerator = refrigerator;
+            Iron = iron;
+        }
+    }
 
-	public enum PropertyType
-	{
-		House = 0,
-		Flat = 1
-	}
+    public enum PropertyType
+    {
+        House = 0,
+        Flat = 1
+    }
 }

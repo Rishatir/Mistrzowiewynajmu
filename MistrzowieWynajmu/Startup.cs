@@ -30,7 +30,7 @@ namespace MistrzowieWynajmu
 		{
 			services.AddMvc();
 
-			var dbConnectionString = @"Server=DESKTOP-KO5R5CB\MSSQLSERVER01;Database=MistrzowieDB;Trusted_Connection=True;";
+			var dbConnectionString = @"Server=(LocalDB)\MSSQLLocalDB;Database=MistrzowieDB;Trusted_Connection=True;";
 			Console.WriteLine(dbConnectionString);
 			services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(dbConnectionString));
 
@@ -42,8 +42,9 @@ namespace MistrzowieWynajmu
 		/// <summary> 
 		/// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		/// </summary>
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, DatabaseContext dataContext)
 		{
+			//dataContext.Database.Migrate();
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
